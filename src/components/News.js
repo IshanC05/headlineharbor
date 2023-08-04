@@ -354,7 +354,7 @@ export class News extends Component {
                     {!this.state.loading && this.state.articles.map((element) => {
                         return <div className="col-md-4" key={element.url}>
                             <NewsItem title={element.title} description={element.description ? element.description.slice(0, 80) + '...' : null} imgUrl={element.urlToImage ? element.urlToImage : "https://t4.ftcdn.net/jpg/04/00/24/31/360_F_400243185_BOxON3h9avMUX10RsDkt3pJ8iQx72kS3.jpg"}
-                                url={element.url} />
+                                url={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
                         </div>
                     })}
                 </div>
