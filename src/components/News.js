@@ -1,8 +1,21 @@
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 import Spinner from './Spinner'
+import PropTypes from 'prop-types'
 
 export class News extends Component {
+
+    static defaultProps = {
+        country: 'in',
+        pageSize: 9,
+        catrgoty: 'general'
+    }
+
+    static propTypes = {
+        country: PropTypes.string,
+        pageSize: PropTypes.number,
+        catrgoty: PropTypes.string
+    }
 
     // parsedData = {
     //     "status": "ok",
@@ -284,7 +297,7 @@ export class News extends Component {
     async componentDidMount() {
 
         this.setState({ loading: true })
-        const data = await fetch(`https://newsapi.org/v2/top-headlines?country=in&apiKey=fc0e29bed4dd4fdba41cd87139b98053&pageSize=${this.props.pageSize}`);
+        const data = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fc0e29bed4dd4fdba41cd87139b98053&pageSize=${this.props.pageSize}`);
         const parsedData = await data.json();
         console.log(parsedData);
         this.setState({
@@ -302,7 +315,7 @@ export class News extends Component {
     handleNextClick = async () => {
 
         this.setState({ loading: true })
-        const data = await fetch(`https://newsapi.org/v2/top-headlines?country=in&apiKey=fc0e29bed4dd4fdba41cd87139b98053&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`);
+        const data = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fc0e29bed4dd4fdba41cd87139b98053&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`);
         const parsedData = await data.json();
         console.log(parsedData);
         this.setState({
@@ -318,7 +331,7 @@ export class News extends Component {
 
         if (this.state.page > 1) {
             this.setState({ loading: true })
-            const data = await fetch(`https://newsapi.org/v2/top-headlines?country=in&apiKey=fc0e29bed4dd4fdba41cd87139b98053&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`);
+            const data = await fetch(`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fc0e29bed4dd4fdba41cd87139b98053&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`);
             const parsedData = await data.json();
             console.log(parsedData);
             this.setState({
@@ -335,7 +348,7 @@ export class News extends Component {
     render() {
         return (
             <div className='container my-3 '>
-                <h1 className='text-center'>NewsMonkey - Top Headlines</h1>
+                <h1 className='text-center' style={{ margin: '40px 0px' }}>NewsMonkey - Top Headlines</h1>
                 {this.state.loading && <Spinner />}
                 <div className="row">
                     {!this.state.loading && this.state.articles.map((element) => {
