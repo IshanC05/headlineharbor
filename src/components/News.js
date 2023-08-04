@@ -17,13 +17,17 @@ export class News extends Component {
         catrgoty: PropTypes.string
     }
 
-    constructor() {
-        super();
+    capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+    constructor(props) {
+        super(props);
         this.state = {
             articles: [],
             loading: false,
             page: 1
         }
+
+        document.title = `${this.capitalize(this.props.category)} - NewsMonkey`
     }
 
     async updateNews() {
@@ -41,20 +45,7 @@ export class News extends Component {
     }
 
     async componentDidMount() {
-
-        // this.setState({ loading: true })
-        // const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fc0e29bed4dd4fdba41cd87139b98053&page=1&pageSize=${this.props.pageSize}`
-        // const data = await fetch(url);
-        // const parsedData = await data.json();
-        // console.log(parsedData);
-        // this.setState({
-        //     articles: parsedData.articles,
-        //     totalResults: parsedData.totalResults,
-        //     loading: false
-        // })
-
         this.updateNews();
-
     }
 
     handleNextClick = async () => {
@@ -73,7 +64,7 @@ export class News extends Component {
     render() {
         return (
             <div className='container my-3 '>
-                <h1 className='text-center' style={{ margin: '40px 0px' }}>NewsMonkey - Top Headlines</h1>
+                <h1 className='text-center' style={{ margin: '40px 0px' }}>Top News from {this.capitalize(this.props.category)} category</h1>
                 {this.state.loading && <Spinner />}
                 <div className="row">
                     {!this.state.loading && this.state.articles.map((element) => {
