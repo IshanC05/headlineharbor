@@ -3,7 +3,6 @@ import NewsItem from './NewsItem'
 import Spinner from './Spinner'
 import PropTypes from 'prop-types'
 import InfiniteScroll from "react-infinite-scroll-component";
-import Error from './Error';
 
 export class News extends Component {
 
@@ -36,7 +35,7 @@ export class News extends Component {
     async updateNews() {
 
         this.setState({ loading: true })
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fc0e29bed4dd4fdba41cd87139b98053&page=${this.state.page}&pageSize=${this.props.pageSize}`
+        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`
         const data = await fetch(url);
         const parsedData = await data.json();
         console.log(parsedData);
@@ -68,7 +67,7 @@ export class News extends Component {
 
     fetchMoreData = async () => {
         this.setState({ page: this.state.page + 1 });
-        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=fc0e29bed4dd4fdba41cd87139b98053&page=${this.state.page}&pageSize=${this.props.pageSize}`
+        const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`
         const data = await fetch(url);
         const parsedData = await data.json();
         this.setState({
@@ -78,35 +77,30 @@ export class News extends Component {
     };
 
     render() {
-        if (this.state.totalResults === 0) {
-            return (<Error />)
-        }
-        else {
-            return (
-                <>
-                    <h1 className='text-center' style={{ margin: '40px 0px' }}>Top News from {this.capitalize(this.props.category)} category</h1>
-                    {this.state.loading && <Spinner />}
-                    <InfiniteScroll
-                        dataLength={this.state.articles.length}
-                        next={this.fetchMoreData}
-                        hasMore={this.state.articles.length !== this.state.totalResults}
-                        loader={<Spinner />}
-                    >
-                        <div className="container">
-                            <div className="row">
-                                {this.state.articles.map((element) => {
-                                    return <div className="col-md-4" key={element.url}>
-                                        <NewsItem title={element.title} description={element.description ? element.description.slice(0, 80) + '...' : null} imgUrl={element.urlToImage ? element.urlToImage : "https://t4.ftcdn.net/jpg/04/00/24/31/360_F_400243185_BOxON3h9avMUX10RsDkt3pJ8iQx72kS3.jpg"}
-                                            url={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
-                                    </div>
-                                })}
-                            </div>
+        return (
+            <>
+                <h1 className='text-center' style={{ margin: '40px 0px' }}>Top News from {this.capitalize(this.props.category)} category</h1>
+                {this.state.loading && <Spinner />}
+                <InfiniteScroll
+                    dataLength={this.state.articles.length}
+                    next={this.fetchMoreData}
+                    hasMore={this.state.articles.length !== this.state.totalResults}
+                    loader={<Spinner />}
+                >
+                    <div className="container">
+                        <div className="row">
+                            {this.state.articles.map((element) => {
+                                return <div className="col-md-4" key={element.url}>
+                                    <NewsItem title={element.title} description={element.description ? element.description.slice(0, 80) + '...' : null} imgUrl={element.urlToImage ? element.urlToImage : "https://t4.ftcdn.net/jpg/04/00/24/31/360_F_400243185_BOxON3h9avMUX10RsDkt3pJ8iQx72kS3.jpg"}
+                                        url={element.url} author={element.author} date={element.publishedAt} source={element.source.name} />
+                                </div>
+                            })}
                         </div>
-                    </InfiniteScroll>
+                    </div>
+                </InfiniteScroll>
 
-                </>
-            )
-        }
+            </>
+        )
     }
 }
 
