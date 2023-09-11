@@ -26,7 +26,7 @@ const News = (props) => {
     }
 
     useEffect(() => {
-        document.title = `${capitalize(props.category)} - NewsMonkey`
+        document.title = `${capitalize(props.category)} - HeadlineHarbor`
         updateNews();
         // eslint-disable-next-line
     }, [])
